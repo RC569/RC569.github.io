@@ -5,47 +5,77 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Music Backlog</title>
     <style>
+        /* Might do something with this later.*/
+        :root {
+            --font-color: #E3DDDD;
+        }
         .gist-meta, #user-content-betterview {
-            display: none;
+            display: none
         }
         table {
             margin-top: 1em !important;
             margin-left: auto;
             margin-right: auto;
-            border-collapse: collapse;
+            border-collapse: collapse
         }
         .gist .gist-data,
         body {
             background-color: #141414 !important;
-            color: #FFF !important;
+            color: var(--font-color) !important
         }
         th,
         tr,
         td {
             background-color: unset !important;
             border: #7d7d7d solid 1px !important;
-            padding: 4px 8px !important;
+            padding: 4px 8px !important
         }
         th {
-            background-color: #1a1a1a !important;
+            background-color: #1a1a1a !important
         }
         table tr:nth-child(2n) {
-            background-color: #15191a !important;
+            background-color: #15191a !important
         }
+        .fontButtons {display:none}
+        .fontButtons button {
+            font-size: 24px;
+            background-color: #616161;
+            color: var(--font-color);
+        }
+        .increaseButton {margin-right:1em}
         @media (max-width: 436px) {
-            tr, th, table{font-size: 13px !important;}
+            .fontButtons {display:block}
         }
-        a {color: #a2a3fb;}
-        a:hover {color: #6566cd;}
-        a:visited {color: #e28af4;}
-        .editlink {float:right;}
+        a {color: #a2a3fb}
+        a:hover {color: #6566cd}
+        a:visited {color: #e28af4}
+        .info a {color:var(--font-color);text-decoration:none;}
+        .editlink {float:right}
     </style>
 </head>
 <body>
+    <div class="fontButtons">
+        <button class="increaseButton" onclick="increaseFont()">+ Font</button>
+        <button class="decreaseButton" onclick="decreaseFont()">- Font</button>
+    </div>
     <script src="https://gist.github.com/RC569/4099f73cd6a46d854ddd5a01f91abd24.js"></script>
     <div class="info">
         <a href="https://gist.github.com/RC569/4099f73cd6a46d854ddd5a01f91abd24">backlog.md</a> hosted on <a href="https://gist.github.com/">gist.github.com</a>
     <a class="editlink" href="https://gist.github.com/RC569/4099f73cd6a46d854ddd5a01f91abd24/edit" target="_blank">[edit]</a>
+    <script>
+        const bltable = document.querySelector(".markdown-body > markdown-accessiblity-table > table");
+
+        function increaseFont() {
+            if (!bltable.style.fontSize) {bltable.style.fontSize ="16px"};
+            newFontSize = Number(bltable.style.fontSize.replace("px",""))+1+"px";
+            bltable.style.fontSize = newFontSize;
+        }
+        function decreaseFont(){
+            if (!bltable.style.fontSize) {bltable.style.fontSize ="16px"};
+            newFontSize = Number(bltable.style.fontSize.replace("px",""))-1+"px";
+            bltable.style.fontSize = newFontSize;
+        }
+    </script>
     </div>
 </body>
 </html>
