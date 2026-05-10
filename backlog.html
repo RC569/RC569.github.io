@@ -55,8 +55,8 @@
 </head>
 <body>
     <div class="fontButtons">
-        <button class="increaseButton" onclick="increaseFont()">+ Font</button>
-        <button class="decreaseButton" onclick="decreaseFont()">- Font</button>
+        <button class="increaseButton" onclick="changeFontSize('increase')">+ Font</button>
+        <button class="decreaseButton" onclick="changeFontSize('decrease')">- Font</button>
     </div>
     <script src="https://gist.github.com/RC569/4099f73cd6a46d854ddd5a01f91abd24.js"></script>
     <div class="info">
@@ -65,15 +65,19 @@
     <script>
         const bltable = document.querySelector(".markdown-body > markdown-accessiblity-table > table");
 
-        function increaseFont() {
-            if (!bltable.style.fontSize) {bltable.style.fontSize ="16px"};
-            newFontSize = Number(bltable.style.fontSize.replace("px",""))+1+"px";
-            bltable.style.fontSize = newFontSize;
-        }
-        function decreaseFont(){
-            if (!bltable.style.fontSize) {bltable.style.fontSize ="16px"};
-            newFontSize = Number(bltable.style.fontSize.replace("px",""))-1+"px";
-            bltable.style.fontSize = newFontSize;
+        function changeFontSize(how) {
+            if ( !bltable.style.fontSize) {
+                bltable.style.fontSize="16px"
+            }
+
+            if (how === "increase") {
+                newFontSize=Number(bltable.style.fontSize.replace("px", ""))+1+"px";
+                bltable.style.fontSize=newFontSize;
+            }
+            if (how === "decrease") {
+                newFontSize=Number(bltable.style.fontSize.replace("px", ""))-1+"px";
+                bltable.style.fontSize=newFontSize;
+            }
         }
     </script>
     </div>
