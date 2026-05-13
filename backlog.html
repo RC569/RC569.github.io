@@ -8,6 +8,9 @@
         /* Might do something with this later.*/
         :root {
             --font-color: #E3DDDD;
+            --background-color: #141414;
+            --link-color: #92a8ff;
+            --link-color-hover: #957fff;
         }
         .gist-meta, #user-content-betterview {
             display: none
@@ -20,7 +23,7 @@
         }
         .gist .gist-data,
         body {
-            background-color: #141414 !important;
+            background-color: var(--background-color) !important;
             color: var(--font-color) !important
         }
         th,
@@ -46,11 +49,11 @@
         @media (max-width: 436px) {
             .fontButtons {display:block}
         }
-        a {color: #a2a3fb}
-        a:hover {color: #6566cd}
-        a:visited {color: #e28af4}
-        .info a {color:var(--font-color);text-decoration:none;}
-        .editlink {float:right}
+        a {color: var(--link-color)}
+        a:hover {color: var(--link-color-hover)}
+        .info a {var(--link-color);text-decoration:none;}
+        .editlink {float:right; color: var(--background-color) !important;}
+        .editlink:hover {color: var(--link-color-hover) !important;}
     </style>
 </head>
 <body>
@@ -61,7 +64,7 @@
     <script src="https://gist.github.com/RC569/4099f73cd6a46d854ddd5a01f91abd24.js"></script>
     <div class="info">
         <a href="https://gist.github.com/RC569/4099f73cd6a46d854ddd5a01f91abd24">backlog.md</a> hosted on <a href="https://gist.github.com/">gist.github.com</a>
-    <a class="editlink" href="https://gist.github.com/RC569/4099f73cd6a46d854ddd5a01f91abd24/edit" target="_blank">[edit]</a>
+        <a class="editlink" href="https://gist.github.com/RC569/4099f73cd6a46d854ddd5a01f91abd24/edit" target="_blank">[edit]</a>
     <script>
         const bltable = document.querySelector(".markdown-body > markdown-accessiblity-table > table");
 
