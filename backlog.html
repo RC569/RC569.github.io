@@ -61,6 +61,7 @@
         <button class="decreaseButton" onclick="changeFontSize('decrease')">- Font</button>
     </div>
     <script src="https://gist.github.com/RC569/4099f73cd6a46d854ddd5a01f91abd24.js"></script>
+    How long will it take to listen to all this garbage?: <span class="scary">¯\_ (ツ)_/¯</span>
     <a class="editlink" href="https://gist.github.com/RC569/4099f73cd6a46d854ddd5a01f91abd24/edit" target="_blank">[edit]</a>
     <script>
         const bltable = document.querySelector(".markdown-body > markdown-accessiblity-table > table");
@@ -79,6 +80,37 @@
                 bltable.style.fontSize=newFontSize;
             }
         }
+
+        function horrifying() {
+            const rows = document.querySelectorAll("table tr");
+            let totalSeconds = 0;
+
+            rows.forEach(row => {
+                const cells = row.querySelectorAll("td");
+                if (cells.length < 4) return;
+
+                const lengthText = cells[3].textContent.trim();
+
+                const match = lengthText.match(/^(\d+):(\d{2}):(\d{2})$/);
+                if (!match) return;
+
+                const [, h, m, s] = match.map(Number);
+                totalSeconds += h * 3600 + m * 60 + s;
+            });
+
+            const hours = Math.floor(totalSeconds / 3600);
+            const minutes = Math.floor((totalSeconds % 3600) / 60);
+            const seconds = totalSeconds % 60;
+
+            const totalLength =
+                `${String(hours).padStart(2, "0")}:` +
+                `${String(minutes).padStart(2, "0")}:` +
+                `${String(seconds).padStart(2, "0")}`;
+
+            lengthtxt = document.querySelector('.scary')
+            lengthtxt.innerHTML = totalLength
+        }
+        horrifying();
     </script>
 </body>
 </html>
