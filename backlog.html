@@ -40,15 +40,11 @@
         table tr:nth-child(2n) {
             background-color: #15191a !important
         }
-        .fontButtons {display:none}
         .fontButtons button {
             font-size: 24px;
             background-color: #616161;
             color: var(--font-color);
-        }
-        .increaseButton {margin-right:1em}
-        @media (max-width: 436px) {
-            .fontButtons {display:block}
+            margin-right: 1em;
         }
         a {color: var(--link-color)}
         a:hover {color: var(--link-color-hover)}
@@ -58,6 +54,7 @@
 </head>
 <body>
     <div class="fontButtons">
+        <button class="sortbylengthButton" onclick="sortTableByLength()">Sort by Length</button>
         <button class="increaseButton" onclick="changeFontSize('increase')">+ Font</button>
         <button class="decreaseButton" onclick="changeFontSize('decrease')">- Font</button>
     </div>
@@ -83,7 +80,7 @@
         }
 
         function horrifying() {
-            const rows = document.querySelectorAll("table tr");
+            const rows = bltable.querySelectorAll("tr");
             let totalSeconds = 0;
 
             rows.forEach(row => {
@@ -112,6 +109,50 @@
             lengthtxt.innerHTML = totalLength
         }
         horrifying();
+        let sortMode = "initial"; // "initial" "longToShort" "shortToLong"
+
+        const tbody = document.querySelector("tbody");
+
+        const originalRows = Array.from(tbody.rows);
+
+        function timeToSeconds(str) {
+            const [h, m, s] = str.trim().split(":").map(Number);
+            return h * 3600 + m * 60 + s;
+        }
+
+        function sortTableByLength() {
+            sortMode =
+                sortMode === "initial" ? "longToShort" :
+                sortMode === "longToShort" ? "shortToLong" :
+                "initial";
+
+            console.log("Sort mode:", sortMode);
+            const rows = Array.from(tbody.rows);
+
+            switch (sortMode) {
+                case "initial":
+                    originalRows.forEach(row => tbody.appendChild(row));
+                    break;
+
+                case "longToShort":
+                    rows
+                        .sort((a, b) =>
+                            timeToSeconds(b.cells[3].textContent) -
+                            timeToSeconds(a.cells[3].textContent)
+                        )
+                        .forEach(row => tbody.appendChild(row));
+                    break;
+
+                case "shortToLong":
+                    rows
+                        .sort((a, b) =>
+                            timeToSeconds(a.cells[3].textContent) -
+                            timeToSeconds(b.cells[3].textContent)
+                )
+                .forEach(row => tbody.appendChild(row));
+                break;
+        }
+    }
     </script>
 </body>
 </html>
