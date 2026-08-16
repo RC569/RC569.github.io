@@ -51,20 +51,22 @@
         }
         a {color: var(--link-color)}
         a:hover {color: var(--link-color-hover)}
-        .editlink {float:right; color: var(--background-color) !important;padding-bottom:16px}
-        .editlink:hover {color: var(--link-color-hover) !important;}
+        .length {font-size: 1.5em;}
+        .scary {color:#00da41;}
     </style>
 </head>
 <body>
     <noscript><span style="color:red;font-size:10em;font-weight:bold;">ENABLE JAVASCRIPT</span></noscript>
+    <h1>Music Backlog</h1>
+    <hr>
     <div class="fontButtons">
         <button class="sortbylengthButton" onclick="sortTableByLength()">Sort by Length</button>
         <button class="increaseButton" onclick="changeFontSize('increase')">+ Font</button>
         <button class="decreaseButton" onclick="changeFontSize('decrease')">- Font</button>
     </div>
+    <span class="length">Total Length: <span class="scary">¯\_ (ツ)_/¯</span></span><br>
+    <a class="editlink" href="https://gist.github.com/RC569/4099f73cd6a46d854ddd5a01f91abd24/edit" target="_blank">[edit]</a> <!-- This is offsetting the table -->
     <script src="https://gist.github.com/RC569/4099f73cd6a46d854ddd5a01f91abd24.js"></script>
-    <span>Length of everything: </span><span class="scary">¯\_ (ツ)_/¯</span>
-    <a class="editlink" href="https://gist.github.com/RC569/4099f73cd6a46d854ddd5a01f91abd24/edit" target="_blank">[edit]</a>
     <script>
         const bltable = document.querySelector(".markdown-body > markdown-accessiblity-table > table");
 
