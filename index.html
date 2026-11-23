@@ -15,6 +15,10 @@
 				display: grid;
 				justify-content: center
 			}
+            #tunes {
+                position: absolute;
+                bottom: 0
+            }
 		</style>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	</head>
@@ -23,6 +27,15 @@
 			<i>crunch</i>
 			<img src="/resources/nom.jpg"/>
 		</div>
-		<audio controls autoplay loop style="position:absolute;bottom:0"><source src="https://files.roundcat.monster/shared/tunes/DistantWater.opus"></audio>
+		<audio controls loop id="tunes" style="position:absolute;bottom:0"><source src="/resources/CANTAFFORD.opus"></audio>
+        <script>
+            var audio = document.getElementById("tunes")
+            audio.volume = 0.5;
+            audio.addEventListener("canplaythrough", () => {
+               audio.play().catch(e => {
+                  window.addEventListener('click', () => {audio.play()}, { once: true })
+               })
+            });
+        </script>
 	</body>
 </html>
