@@ -17,10 +17,22 @@
             margin: 10vh auto
         }
 
-        .monster {
+        .monster img {
             display: grid;
-            justify-content: center;
-            text-align: center
+            margin: 0 auto
+        }
+
+        .crunch {
+            animation-name: crunchcolor;
+            animation-duration: 3s;
+            animation-iteration-count: infinite;
+            margin: 0 auto
+        }
+
+        @keyframes crunchcolor {
+            0% {filter: hue-rotate(0deg)}
+            50% {filter: hue-rotate(20deg)}
+            100% {filter: hue-rotate(0deg)}
         }
 
         #tunes {
@@ -32,9 +44,13 @@
 </head>
 
 <body>
+    <!--
+        I have to keep them happy or they will be upset with me :(
+        The monster requested a home so this is what I created for them
+    -->
     <div class="monster">
         <img src="/resources/nom.jpg" />
-        <span><i>crunch</i></span>
+        <img class="crunch" src="/resources/crunch.png" />
     </div>
 
     <audio controls loop id="tunes" style="position:absolute;bottom:0">
