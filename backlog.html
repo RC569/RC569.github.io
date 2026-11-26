@@ -1,88 +1,27 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <title>Music Backlog</title>
     <meta charset="utf-8">
+    <meta content="Music Backlog" property="og:title" />
+    <meta content="A big list of music I will never listen to!" property="og:description" />
+    <meta content="https://www.roundcat.monster/resources/nom.jpg" property="og:image" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/gif" href="/resources/favicon.gif" sizes="20x20">
-    <title>Music Backlog</title>
-    <style>
-        /* Might do something with this later.*/
-        :root {
-            --font-color: #E3DDDD;
-            --background-color: #141414;
-            --link-color: #92a8ff;
-            --link-color-hover: #957fff
-        }
-        #betterview { /* for github.com */
-            display: none
-        }
-        table {
-            margin-top: 1em;
-            margin-left: auto;
-            margin-right: auto;
-            border-collapse: collapse;
-            display:block;
-            overflow-x: scroll
-        }
-        body {
-            background-color: var(--background-color);
-            color: var(--font-color);
-            font-family: "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji"
-        }
-        th,
-        tr,
-        td {
-            background-color: unset;
-            border: #7d7d7d solid 1px;
-            padding: 4px 8px
-        }
-        th {
-            background-color: #1a1a1a
-        }
-        td {
-            max-width: 250px;
-        }
-        table tr:nth-child(2n) {
-            background-color: #15191a
-        }
-        button {
-            font-size: 18px;
-            background-color: #3f3f3f;
-            border: #5B5B5B outset 2px;
-            color: var(--font-color);
-            margin-right: .5em
-        }
-        button:active {
-            background-color: #5f5f5f;
-            border: #5B5B5B inset 2px
-        }
-        .editButton {
-            float: right;
-            margin: unset;
-            display: none
-        }
-        .editButton a {
-            color: unset;
-            text-decoration: none;
-            cursor: default
-        }
-        a {color: var(--link-color)}
-        a:hover {color: var(--link-color-hover)}
-        .length {font-size: 1.5em;}
-        .totallength {color: #00da41;}
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
-<body>
+
+<body class="backlogcontent">
     <noscript><span style="color:red;font-size:10em;font-weight:bold;">ENABLE JAVASCRIPT</span></noscript>
-    <script src="https://cdn.jsdelivr.net/npm/marked/lib/marked.umd.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/lib/marked.umd.js"></script> <!-- Load https://github.com/markedjs/marked -->
 
     <h1>Music Backlog</h1>
     <div class="buttons">
         <button class="sortbylengthButton" onclick="sortTableByLength()">Sort by Length</button>
         <button class="increaseButton" onclick="changeFontSize('increase')">+ Font</button>
         <button class="decreaseButton" onclick="changeFontSize('decrease')">- Font</button>
-        <button class="sourceButton" onclick="change_datasource()">Change data to <span class="sourcename">github.com</span></button> <span>&lt;-- reloads page</span>
-        <button class="editButton"><a href="https://github.com/RC569/backlog/edit/main/backlog.md" target="_blank">Edit</a></button>
+        <button class="sourceButton" onclick="change_datasource()">Change data to <span class="sourcename">github.com</span></button><span>(reloads page)</span>
+        <button class="editButton" onclick="window.open('https://github.com/RC569/backlog/edit/main/backlog.md', '_blank')">Edit</button>
     </div>
     <span class="length">Total Length: <span class="totallength">¯\_ (ツ)_/¯</span></span><br>
     <div id="backlog"></div>
@@ -100,182 +39,9 @@
                 <li>Low, Medium, High, Next</li>
                 <li>Next are albums I want to listen to next</li>
                 <li>Next with asterisks are what I want to listen to in order</li>
-                <li>For example: Next -&gt; Next* -&gt; Next**</li>
+                <li>For example: Next &gt; Next* &gt; Next**</li>
             </ul>
     </div>
-    <script>
-        let bltable;
-        let tbody; // for ai slop code
-        let originalRows; // for ai slop code
-
-        tablediv = document.getElementById('backlog');
-        var datasource = localStorage.getItem("datasource");
-        sourceButton = document.querySelector(".sourceButton")
-
-        serverbl = "/resources/backlog.md"
-        githubbl = "https://raw.githubusercontent.com/RC569/backlog/main/backlog.md"
-
-        function get_datasource() {
-            return localStorage.getItem("datasource");
-        }
-
-        function change_datasource() {
-            if (datasource === serverbl) {
-                localStorage.setItem("datasource", githubbl);
-            } else {
-                localStorage.setItem("datasource", serverbl);
-            }
-            edit_button_visibility()
-            location.reload();
-        }
-
-        function init_datasource() {
-            if (!datasource) {
-                localStorage.setItem("datasource", serverbl);
-                datasource = get_datasource();
-                console.log(`Changed datasource to ${datasource}`)
-            }
-        }
-
-        function edit_button_visibility() {
-            get_datasource()
-            editbutton = document.querySelector(".editButton")
-            if (datasource === githubbl) {
-                editbutton.style.display = "block";
-            } else {
-                editbutton.style.display = "none";
-            }
-        }
-
-        async function get_backlog() {
-            try {
-                const r = await fetch(datasource);
-                if (!r.ok) {
-                    if (r.status === 404) return backlogdata = `${datasource} replied with status code 404. if this is ${serverbl}, it might not be on the server.`
-                    throw new Error(`status: ${r.status}`);
-                }
-                backlogdata = await r.text();
-                return backlogdata
-            } catch(error) {
-                console.error(error.message);
-            }
-        }
-
-        async function make_table() {
-            backlogdata = await get_backlog()
-
-            if (!backlogdata) return;
-
-            tablediv.innerHTML = marked.parse(backlogdata);
-
-            bltable = tablediv.querySelector("table")
-            tbody = document.querySelector("tbody"); // for ai slop code
-            originalRows = Array.from(tbody.rows); // for ai slop code
-
-            get_full_playtime(); // for ai slop code
-        }
-
-        // make backlog table :)
-        if (!datasource) {
-            init_datasource();
-            make_table();
-        } else {
-            get_datasource();
-            if (datasource === githubbl) sourceButton.querySelector(".sourcename").innerHTML = ` ${serverbl}`;
-            edit_button_visibility()
-            make_table();
-        }
-
-        function changeFontSize(how) {
-            if ( !bltable.style.fontSize) {
-                bltable.style.fontSize="16px"
-            }
-
-            if (how === "increase") {
-                newFontSize=Number(bltable.style.fontSize.replace("px", ""))+1+"px";
-                bltable.style.fontSize=newFontSize;
-            }
-            if (how === "decrease") {
-                newFontSize=Number(bltable.style.fontSize.replace("px", ""))-1+"px";
-                bltable.style.fontSize=newFontSize;
-            }
-        }
-
-        // Everything below this comment is AI slop. :(
-        // saving this link here for when i'm in the mood to unsloppify this https://stackoverflow.com/questions/9640266/convert-hhmmss-string-to-seconds-only-in-javascript
-
-        function get_full_playtime() {
-            const rows = bltable.querySelectorAll("tr");
-            let totalSeconds = 0;
-
-            rows.forEach(row => {
-                const cells = row.querySelectorAll("td");
-                if (cells.length < 4) return;
-
-                const lengthText = cells[3].textContent.trim();
-
-                const match = lengthText.match(/^(\d+):(\d{2}):(\d{2})$/);
-                if (!match) return;
-
-                const [, h, m, s] = match.map(Number);
-                totalSeconds += h * 3600 + m * 60 + s;
-            });
-
-            const hours = Math.floor(totalSeconds / 3600);
-            const minutes = Math.floor((totalSeconds % 3600) / 60);
-            const seconds = totalSeconds % 60;
-
-            const totalLength =
-                `${String(hours).padStart(2, "0")}:` +
-                `${String(minutes).padStart(2, "0")}:` +
-                `${String(seconds).padStart(2, "0")}`;
-
-            lengthtxt = document.querySelector('.totallength')
-            lengthtxt.innerHTML = totalLength
-        }
-
-        let sortMode = "initial"; // "initial" "longToShort" "shortToLong"
-
-        function timeToSeconds(str) {
-            const [h, m, s] = str.trim().split(":").map(Number);
-            return h * 3600 + m * 60 + s;
-        }
-
-        function sortTableByLength() {
-            sortMode =
-                sortMode === "initial" ? "longToShort" :
-                sortMode === "longToShort" ? "shortToLong" :
-                "initial";
-
-            console.log("Sort mode:", sortMode);
-
-
-            const rows = Array.from(tbody.rows);
-
-            switch (sortMode) {
-                case "initial":
-                    originalRows.forEach(row => tbody.appendChild(row));
-                    break;
-
-                case "longToShort":
-                    rows
-                        .sort((a, b) =>
-                            timeToSeconds(b.cells[3].textContent) -
-                            timeToSeconds(a.cells[3].textContent)
-                        )
-                        .forEach(row => tbody.appendChild(row));
-                    break;
-
-                case "shortToLong":
-                    rows
-                        .sort((a, b) =>
-                            timeToSeconds(a.cells[3].textContent) -
-                            timeToSeconds(b.cells[3].textContent)
-                )
-                .forEach(row => tbody.appendChild(row));
-                break;
-        }
-    }
-    </script>
+    <script src="/resources/scripts/backlog.js"></script>
 </body>
 </html>

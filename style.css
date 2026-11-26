@@ -1,0 +1,96 @@
+:root {
+    --font-color: #eee;
+    --background-color: #111;
+    --link-color: #92a8ff;
+    --link-color-hover: #957fff;
+    --fonts: "Noto Sans", "Arial", "Helvetica", "sans-serif"
+}
+
+body {
+    background-color: var(--background-color);
+    color: var(--font-color);
+    font-family: var(--fonts)
+}
+
+a {color: var(--link-color)}
+a:hover {color: var(--link-color-hover)}
+
+button {
+    font-size: 18px;
+    background-color: #3f3f3f;
+    border: #5B5B5B outset 2px;
+    color: var(--font-color);
+    margin-right: .5em;
+    border-radius: 8px
+}
+
+button:hover {
+    background-color: #4f4f4f
+}
+
+button:active {
+    background-color: #5f5f5f;
+    border: #5B5B5B inset 2px
+}
+
+.monster {
+    margin: 10vh auto
+}
+
+.monster img {
+    display: grid;
+    margin: 0 auto
+}
+
+.crunch {
+    animation-name: crunchcolor;
+    animation-duration: 3s;
+    animation-iteration-count: infinite;
+}
+
+@keyframes crunchcolor {
+    0% {filter: hue-rotate(0deg)}
+    50% {filter: hue-rotate(20deg)}
+    100% {filter: hue-rotate(0deg)}
+}
+
+#tunes {
+    position: absolute;
+    bottom: 0
+}
+
+/* backlog.html */
+#backlog table {
+    margin-top: 1em;
+    margin-left: auto;
+    margin-right: auto;
+    border-collapse: collapse;
+    display:block;
+    overflow-x: scroll
+}
+
+#backlog table th, tr, td {
+    border: #565656 solid 1px;
+    padding: 4px 8px
+}
+
+#backlog table th {
+    background-color: #1a1a1a
+}
+
+#backlog table td {
+    max-width: 250px
+}
+
+#backlog table tr:nth-child(2n) {
+    background-color: #171818
+}
+
+.backlogcontent .editButton {
+    float: right;
+    margin: unset;
+    display: none
+}
+
+.backlogcontent .length {font-size: 1.5em;}
+.backlogcontent .totallength {color: #00da41;}
