@@ -13,7 +13,7 @@
             --link-color: #92a8ff;
             --link-color-hover: #957fff
         }
-        #betterview { /* for gist.github.com */
+        #betterview { /* for github.com */
             display: none
         }
         table {
@@ -81,8 +81,8 @@
         <button class="sortbylengthButton" onclick="sortTableByLength()">Sort by Length</button>
         <button class="increaseButton" onclick="changeFontSize('increase')">+ Font</button>
         <button class="decreaseButton" onclick="changeFontSize('decrease')">- Font</button>
-        <button class="sourceButton" onclick="change_datasource()">Change data to <span class="sourcename">gist.github.com</span></button> <span>&lt;-- reloads page</span>
-        <button class="editButton"><a href="https://gist.github.com/RC569/4099f73cd6a46d854ddd5a01f91abd24/edit" target="_blank">Edit</a></button>
+        <button class="sourceButton" onclick="change_datasource()">Change data to <span class="sourcename">github.com</span></button> <span>&lt;-- reloads page</span>
+        <button class="editButton"><a href="https://github.com/RC569/backlog/edit/main/backlog.md" target="_blank">Edit</a></button>
     </div>
     <span class="length">Total Length: <span class="totallength">¯\_ (ツ)_/¯</span></span><br>
     <div id="backlog"></div>
@@ -113,7 +113,7 @@
         sourceButton = document.querySelector(".sourceButton")
 
         serverbl = "/resources/backlog.md"
-        gistbl = "https://gist.githubusercontent.com/RC569/4099f73cd6a46d854ddd5a01f91abd24/raw/backlog.md"
+        githubbl = "https://raw.githubusercontent.com/RC569/backlog/main/backlog.md"
 
         function get_datasource() {
             return localStorage.getItem("datasource");
@@ -121,7 +121,7 @@
 
         function change_datasource() {
             if (datasource === serverbl) {
-                localStorage.setItem("datasource", gistbl);
+                localStorage.setItem("datasource", githubbl);
             } else {
                 localStorage.setItem("datasource", serverbl);
             }
@@ -140,7 +140,7 @@
         function edit_button_visibility() {
             get_datasource()
             editbutton = document.querySelector(".editButton")
-            if (datasource === gistbl) {
+            if (datasource === githubbl) {
                 editbutton.style.display = "block";
             } else {
                 editbutton.style.display = "none";
@@ -181,7 +181,7 @@
             make_table();
         } else {
             get_datasource();
-            if (datasource === gistbl) sourceButton.querySelector(".sourcename").innerHTML = ` ${serverbl}`;
+            if (datasource === githubbl) sourceButton.querySelector(".sourcename").innerHTML = ` ${serverbl}`;
             edit_button_visibility()
             make_table();
         }
