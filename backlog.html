@@ -81,7 +81,7 @@
         <button class="sortbylengthButton" onclick="sortTableByLength()">Sort by Length</button>
         <button class="increaseButton" onclick="changeFontSize('increase')">+ Font</button>
         <button class="decreaseButton" onclick="changeFontSize('decrease')">- Font</button>
-        <button class="sourceButton" onclick="change_datasource()">Switch table data to <span class="sourcename">gist.github.com</span></button> <span>&lt;-- reloads page</span>
+        <button class="sourceButton" onclick="change_datasource()">Change data to <span class="sourcename">gist.github.com</span></button> <span>&lt;-- reloads page</span>
         <button class="editButton"><a href="https://gist.github.com/RC569/4099f73cd6a46d854ddd5a01f91abd24/edit" target="_blank">Edit</a></button>
     </div>
     <span class="length">Total Length: <span class="totallength">¯\_ (ツ)_/¯</span></span><br>
@@ -180,7 +180,7 @@
             make_table();
         } else {
             get_datasource();
-            if (datasource === gistbl) sourceButton.querySelector(".sourcename").innerHTML = " server backlog.md";
+            if (datasource === gistbl) sourceButton.querySelector(".sourcename").innerHTML = ` ${serverbl}`;
             edit_button_visibility()
             make_table();
         }
