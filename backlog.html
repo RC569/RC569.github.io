@@ -113,7 +113,7 @@
         sourceButton = document.querySelector(".sourceButton")
 
         serverbl = "/resources/backlog.md"
-        gistbl = "https://gist.githubusercontent.com/RC569/4099f73cd6a46d854ddd5a01f91abd24/raw/3fce39f17ed26dcd823bd6b09c590bd40e24ff96/backlog.md"
+        gistbl = "https://gist.githubusercontent.com/RC569/4099f73cd6a46d854ddd5a01f91abd24/raw/backlog.md"
 
         function get_datasource() {
             return localStorage.getItem("datasource");
@@ -151,6 +151,7 @@
             try {
                 const r = await fetch(datasource);
                 if (!r.ok) {
+                    if (r.status === 404) return backlogdata = `${datasource} replied with status code 404. if this is ${serverbl}, it might not be on the server.`
                     throw new Error(`status: ${r.status}`);
                 }
                 backlogdata = await r.text();
