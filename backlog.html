@@ -11,77 +11,79 @@
             --font-color: #E3DDDD;
             --background-color: #141414;
             --link-color: #92a8ff;
-            --link-color-hover: #957fff;
+            --link-color-hover: #957fff
         }
-        .gist-meta, #user-content-betterview {
+        #betterview { /* for gist.github.com */
             display: none
         }
         table {
-            margin-top: 1em !important;
+            margin-top: 1em;
             margin-left: auto;
             margin-right: auto;
             border-collapse: collapse
         }
-        .gist .gist-data,
         body {
-            background-color: var(--background-color) !important;
-            color: var(--font-color) !important;
-	        font-family: "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+            background-color: var(--background-color);
+            color: var(--font-color);
+            font-family: "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji"
         }
         th,
         tr,
         td {
-            background-color: unset !important;
-            border: #7d7d7d solid 1px !important;
-            padding: 4px 8px !important
+            background-color: unset;
+            border: #7d7d7d solid 1px;
+            padding: 4px 8px
         }
         th {
-            background-color: #1a1a1a !important
+            background-color: #1a1a1a
         }
         td {
             max-width: 250px;
         }
         table tr:nth-child(2n) {
-            background-color: #15191a !important
+            background-color: #15191a
         }
         button {
             font-size: 18px;
             background-color: #3f3f3f;
             border: #5B5B5B outset 2px;
             color: var(--font-color);
-            margin-right: .5em;
+            margin-right: .5em
         }
         button:active {
             background-color: #5f5f5f;
-            border: #5B5B5B inset 2px;
+            border: #5B5B5B inset 2px
         }
         .editButton {
             float: right;
             margin: unset;
+            display: none
         }
         .editButton a {
-            color: unset !important;
+            color: unset;
             text-decoration: none;
-            cursor: default;
+            cursor: default
         }
         a {color: var(--link-color)}
         a:hover {color: var(--link-color-hover)}
         .length {font-size: 1.5em;}
-        .scary {color: #00da41;}
+        .totallength {color: #00da41;}
     </style>
 </head>
 <body>
     <noscript><span style="color:red;font-size:10em;font-weight:bold;">ENABLE JAVASCRIPT</span></noscript>
+    <script src="https://cdn.jsdelivr.net/npm/marked/lib/marked.umd.js"></script>
+
     <h1>Music Backlog</h1>
-    <div class="fontButtons">
-        <!-- Make sure these buttons look fine on a phone screen -->
+    <div class="buttons">
         <button class="sortbylengthButton" onclick="sortTableByLength()">Sort by Length</button>
         <button class="increaseButton" onclick="changeFontSize('increase')">+ Font</button>
         <button class="decreaseButton" onclick="changeFontSize('decrease')">- Font</button>
+        <button class="sourceButton" onclick="change_datasource()">Switch table data to <span class="sourcename">gist.github.com</span></button> <span>&lt;-- reloads page</span>
         <button class="editButton"><a href="https://gist.github.com/RC569/4099f73cd6a46d854ddd5a01f91abd24/edit" target="_blank">Edit</a></button>
     </div>
-    <span class="length">Total Length: <span class="scary">¯\_ (ツ)_/¯</span></span><br>
-    <script src="https://gist.github.com/RC569/4099f73cd6a46d854ddd5a01f91abd24.js"></script>
+    <span class="length">Total Length: <span class="totallength">¯\_ (ツ)_/¯</span></span><br>
+    <div id="backlog"></div>
     <div>
     <h3>Explanation</h3>
     <h4>Status</h4>
@@ -100,7 +102,86 @@
             </ul>
     </div>
     <script>
-        const bltable = document.querySelector(".markdown-body > markdown-accessiblity-table > table");
+        let bltable;
+        let tbody; // for ai slop code
+        let originalRows; // for ai slop code
+
+        tablediv = document.getElementById('backlog');
+        var datasource = localStorage.getItem("datasource");
+        sourceButton = document.querySelector(".sourceButton")
+
+        serverbl = "/resources/backlog.md"
+        gistbl = "https://gist.githubusercontent.com/RC569/4099f73cd6a46d854ddd5a01f91abd24/raw/3fce39f17ed26dcd823bd6b09c590bd40e24ff96/backlog.md"
+
+        function get_datasource() {
+            return localStorage.getItem("datasource");
+        }
+
+        function change_datasource() {
+            if (datasource === serverbl) {
+                localStorage.setItem("datasource", gistbl);
+            } else {
+                localStorage.setItem("datasource", serverbl);
+            }
+            edit_button_visibility()
+            location.reload();
+        }
+
+        function init_datasource() {
+            if (!datasource) {
+                localStorage.setItem("datasource", serverbl);
+                datasource = get_datasource();
+                console.log(`Changed datasource to ${datasource}`)
+            }
+        }
+
+        function edit_button_visibility() {
+            get_datasource()
+            editbutton = document.querySelector(".editButton")
+            if (datasource === gistbl) {
+                editbutton.style.display = "block";
+            } else {
+                editbutton.style.display = "none";
+            }
+        }
+
+        async function get_backlog() {
+            try {
+                const r = await fetch(datasource);
+                if (!r.ok) {
+                    throw new Error(`status: ${r.status}`);
+                }
+                backlogdata = await r.text();
+                return backlogdata
+            } catch(error) {
+                console.error(error.message);
+            }
+        }
+
+        async function make_table() {
+            backlogdata = await get_backlog()
+
+            if (!backlogdata) return;
+
+            tablediv.innerHTML = marked.parse(backlogdata);
+
+            bltable = tablediv.querySelector("table")
+            tbody = document.querySelector("tbody"); // for ai slop code
+            originalRows = Array.from(tbody.rows); // for ai slop code
+
+            get_full_playtime(); // for ai slop code
+        }
+
+        // make backlog table :)
+        if (!datasource) {
+            init_datasource();
+            make_table();
+        } else {
+            get_datasource();
+            if (datasource === gistbl) sourceButton.querySelector(".sourcename").innerHTML = " server backlog.md";
+            edit_button_visibility()
+            make_table();
+        }
 
         function changeFontSize(how) {
             if ( !bltable.style.fontSize) {
@@ -117,7 +198,10 @@
             }
         }
 
-        function horrifying() {
+        // Everything below this comment is AI slop. :(
+        // saving this link here for when i'm in the mood to unsloppify this https://stackoverflow.com/questions/9640266/convert-hhmmss-string-to-seconds-only-in-javascript
+
+        function get_full_playtime() {
             const rows = bltable.querySelectorAll("tr");
             let totalSeconds = 0;
 
@@ -143,15 +227,11 @@
                 `${String(minutes).padStart(2, "0")}:` +
                 `${String(seconds).padStart(2, "0")}`;
 
-            lengthtxt = document.querySelector('.scary')
+            lengthtxt = document.querySelector('.totallength')
             lengthtxt.innerHTML = totalLength
         }
-        horrifying();
+
         let sortMode = "initial"; // "initial" "longToShort" "shortToLong"
-
-        const tbody = document.querySelector("tbody");
-
-        const originalRows = Array.from(tbody.rows);
 
         function timeToSeconds(str) {
             const [h, m, s] = str.trim().split(":").map(Number);
@@ -165,6 +245,8 @@
                 "initial";
 
             console.log("Sort mode:", sortMode);
+
+
             const rows = Array.from(tbody.rows);
 
             switch (sortMode) {
