@@ -14,8 +14,6 @@
 <body class="backlogcontent">
     <noscript><span style="color:red;font-size:10em;font-weight:bold;">ENABLE JAVASCRIPT</span></noscript>
     <script src="https://cdn.jsdelivr.net/npm/marked/lib/marked.umd.js"></script> <!-- Load https://github.com/markedjs/marked -->
-
-    <h1>Music Backlog</h1>
     <div class="buttons">
         <button class="sortbylengthButton" onclick="sortTableByLength()">Sort by Length</button>
         <button class="increaseButton" onclick="changeFontSize('increase')">+ Font</button>
@@ -25,22 +23,21 @@
     </div>
     <span class="length">Total Length: <span class="totallength">¯\_ (ツ)_/¯</span></span><br>
     <div id="backlog"></div>
-    <div>
-    <h3>Explanation</h3>
+    <div class="explanation">
     <h4>Status</h4>
-            <ul>
-                <li>Not Downloaded: Album hasn't been downloaded yet</li>
-                <li>Unplayed: Album is downloaded, not sorted in my library, and I haven't listened to it</li>
-                <li>In Library: Album is sorted in my library, and I haven't listened to it</li>
-                <li>Relisten: Album is sorted in my library, and I want to relisten to it</li>
-            </ul>
+    <ul>
+        <li>Not Downloaded: Album hasn't been downloaded yet</li>
+        <li>Unplayed: Album is downloaded, not sorted in my library, and I haven't listened to it</li>
+        <li>In Library: Album is sorted in my library, and I haven't listened to it</li>
+        <li>Relisten: Album is sorted in my library, and I want to relisten to it</li>
+    </ul>
     <h4>Priority</h4>
-            <ul>
-                <li>Low, Medium, High, Next</li>
-                <li>Next are albums I want to listen to next</li>
-                <li>Next with asterisks are what I want to listen to in order</li>
-                <li>For example: Next &gt; Next* &gt; Next**</li>
-            </ul>
+    <ul>
+        <li>Low, Medium, High, Next</li>
+        <li>Next are albums I want to listen to next</li>
+        <li>Next with asterisks are what I want to listen to in order</li>
+        <li>For example: Next &gt; Next* &gt; Next**</li>
+    </ul>
     </div>
     <script src="/resources/scripts/backlog.js"></script>
 </body>
