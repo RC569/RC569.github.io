@@ -34,15 +34,15 @@ button:active {
 }
 
 .monster {
-    margin: 10vh auto 0
+    margin: 10vh auto 2em
 }
 
-.monster img {
+.monster img, #rc img {
     display: grid;
     margin: 0 auto
 }
 
-.crunch {
+.crunch, #rc .link {
     animation-name: crunchcolor;
     animation-duration: 3s;
     animation-iteration-count: infinite;
@@ -52,6 +52,14 @@ button:active {
     0% {filter: hue-rotate(0deg)}
     50% {filter: hue-rotate(20deg)}
     100% {filter: hue-rotate(0deg)}
+}
+
+#rc {
+    margin: 0 500px
+}
+
+#rc .link {
+    margin-bottom: .5em
 }
 
 #tunes {
